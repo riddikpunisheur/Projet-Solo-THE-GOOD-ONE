@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}R{% endblock %}
 
 {% block body %}
 <style>
@@ -11,12 +11,10 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
-    {{ form_start(registrationForm) }}
-    {{ form_row(registrationForm.email) }}
-    {{ form_row(registrationForm.plainPassword) }}
-    {{ form_row(registrationForm.agreeTerms) }}
-    
-    <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ '/var/www/html/Atlantis/Projet/projet-the-good-one/projet-the-good-one/src/Controller/RegistrationController.php'|file_link(0) }}">src/Controller/RegistrationController.php</a></code></li>
+        <li>Your template at <code><a href="{{ '/var/www/html/Atlantis/Projet/projet-the-good-one/projet-the-good-one/templates/registration/index.html.twig'|file_link(0) }}">templates/registration/index.html.twig</a></code></li>
+    </ul>
 </div>
 {% endblock %}
