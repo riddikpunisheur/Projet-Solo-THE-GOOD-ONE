@@ -18,16 +18,28 @@ security:
             lazy: true
             provider: app_user_provider
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
+            form_login:
+                login_path: login
+                check_path: login
+                username_parameter: login[_username]
+                password_parameter: login[_password]
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            logout:
+                path:   /logout
+                target: /
+            
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin/(question|answer)/toggle, roles: ROLE_MODERATOR }
+        - { path: ^/admin/(tag|user), roles: ROLE_MODERATOR }
+        - { path: ^/answer/validate, roles: ROLE_USER }
+        - { path: ^/question/add, roles: ROLE_USER }
+        - { path: ^/user/(profile|edit), roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_MODERATOR
+        ROLE_MODERATOR: ROLE_USER
 
     

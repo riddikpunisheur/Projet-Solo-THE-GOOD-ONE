@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user", name="user", methods={"GET"})
+     * @Route("/user", name="app_users", methods={"GET"})
      */
     public function register(Request $request)
     {
