@@ -1,9 +1,22 @@
+body, html {
+  height: 100%;
+}
+.bg {
+  background-image: url("../pictures/couple.plage.jpg");
+
+  height: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .login_form_wrapper {
-    float: left;
-    width: 100%;
+    
+    width: 60%;
     padding-top: 40px;
     padding-bottom: 100px;
-    background-color: grey
+    
 }
 
 .login_wrapper {
