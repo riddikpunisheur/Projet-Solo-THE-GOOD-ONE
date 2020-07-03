@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 
 class RegistrationController extends AbstractController
 {
@@ -21,7 +22,7 @@ class RegistrationController extends AbstractController
      * @Route("/register", name="app_register")
      */
     public function register(
-        LoginFormAuthenticator $loginFormAuthenticator,
+        AbstractLoginFormAuthenticator $AbstractLoginFormAuthenticator,
         GuardAuthenticatorHandler $guardHandler,
         Request $request,
         UserPasswordEncoderInterface $passwordEncoder
@@ -54,7 +55,7 @@ class RegistrationController extends AbstractController
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,          // the User object you just created
                 $request,
-                $loginFormAuthenticator, // authenticator whose onAuthenticationSuccess you want to use
+                $AbstractLoginFormAuthenticator, // authenticator whose onAuthenticationSuccess you want to use
                 'main'          // the name of your firewall in security.yaml
             );
         }

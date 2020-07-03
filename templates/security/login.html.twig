@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+<form method="post">
+<h1>Connexion</h1>
+
+{% if error %}
+<div class="alert alert-danger">
+    {{ error.messageKey|trans(error.messageData, 'security') }}
+</div>
+{% endif %}
+{% if app.user %}
+<div class="mb-3">
+    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+</div>
+{% endif %}
+
+
+<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+<div class="formsix-pos">
+    <div class="form-group i-email">
+        <label for="inputEmail">Email</label> <input type="email" value="{{ last_username }}" name="email"
+               id="inputEmail" class="form-control" placeholder="Email Address *" required autofocus>
+    </div>
+    
+    <label for="inputPassword">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" required="" placeholder="Password *">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    
+    </div>
+    <div class="formsix-e">
+        <div class="form-group i-password"> <input type="password" class="form-control" required="" id="password2"
+                placeholder="Password *"> </div>
+    </div>
+
+
+<div class="login_remember_box"> <label class="control control--checkbox">Remember me <input type="checkbox"> <span
+            class="control__indicator"></span> </label> <a href="#" class="forget_password"> Forgot Password </a> </div>
+<div class="login_btn_wrapper"> <button type="submit" class="btn btn-primary login_btn"> Login </a> </div></button>
+<div class="login_message">
+
+</form>
+{% endblock %}
+

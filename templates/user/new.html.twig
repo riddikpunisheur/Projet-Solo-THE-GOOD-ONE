@@ -4,4 +4,8 @@
 
 {% block body %} <h1>Create New User</h1>
 
+{{ include('user/_form.html.twig') }}
+
+<a href="{{ path('user_index') }}">back to list</a>
+
 {% endblock %}

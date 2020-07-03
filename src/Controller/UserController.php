@@ -28,7 +28,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="users_new", methods={"GET,POST"})
+     * @Route("/new", name="user_new", methods={"GET,POST"})
      */
     public function new(Request $request): Response
     {
@@ -84,4 +84,25 @@ class UserController extends AbstractController
         'user' => $user,
         'form' => $form,    ]); 
         }
+
+    /**
+     * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, User $user): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            // ... do something, like deleting an object
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
+
+            
+        }
+       
+
+            return $this->redirectToRoute('user_index');
+        }
+        
+  
+    
 } 

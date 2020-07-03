@@ -1,22 +1,31 @@
 security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     encoders:
         App\Entity\User:
-            algorithm: auto
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+            algorithm: bcrypt
+
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
+        our_db_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: username
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             anonymous: lazy
-            lazy: true
-            provider: app_user_provider
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+            provider: our_db_provider
 
             form_login:
                 login_path: login
@@ -32,14 +41,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin/(questions|activitys)/toggle, roles: ROLE_MODERATOR }
-        - { path: ^/admin/(message|user), roles: ROLE_MODERATOR }
-        - { path: ^/activitys/validate, roles: ROLE_USER }
-        - { path: ^/questions/add, roles: ROLE_USER }
+        - { path: ^/admin/(question|answer)/toggle, roles: ROLE_MODERATOR }
+        - { path: ^/admin/(tag|user), roles: ROLE_MODERATOR }
+        - { path: ^/answer/validate, roles: ROLE_USER }
+        - { path: ^/question/add, roles: ROLE_USER }
         - { path: ^/user/(profile|edit), roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_MODERATOR
         ROLE_MODERATOR: ROLE_USER
-
-    
