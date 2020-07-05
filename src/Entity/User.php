@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\Entity\Questions;
+use App\Entity\Activitys;
 use App\Repository\UserRepository;
+use App\Form\UserType;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;

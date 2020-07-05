@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\User;
+use App\Entity\Activitys;
+use App\Form\UserType;
 use App\Repository\QuestionsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
