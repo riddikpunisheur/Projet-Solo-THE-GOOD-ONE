@@ -27,11 +27,9 @@ class UserType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les deux mots de passe doivent être identiques.',
                 'first_options'  => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Retapez votre mot de passe'],
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('birthdate', BirthdayType::class,)
             ->add('pictures',)
             ->add('about',);
             
