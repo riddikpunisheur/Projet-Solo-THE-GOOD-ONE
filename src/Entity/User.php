@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"email"}, message="ce compte existe déjà avec cet email")
  */
 class User implements UserInterface
 {
@@ -26,53 +26,102 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank(allowNull=false, message="Prénom obligatoire")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 64,
+     *      minMessage = "{{ limit }} caractères minimum",
+     *      maxMessage = "{{ limit }} caractères maximum",
+     *      allowEmptyString = false
+     * )
      */
+
     private $first_name;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(allowNull=false, message="Nom obligatoire")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 64,
+     *      minMessage = "{{ limit }} caractères minimum",
+     *      maxMessage = "{{ limit }} caractères maximum",
+     *      allowEmptyString = false
+     * )
+     * 
      */
+
     private $last_name;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="date", length=128)
+     * @Assert\NotBlank(allowNull=false, message="La date de naissance est obligatoire")
+     * @Assert\LessThan("-18 years", message="Vous devez être majeur pour vous inscrire")
+     * 
      */
+
     private $birthdate;
 
     /**
-     * @ORM\Column(type="string", length=128)
+     * @ORM\Column(type="json", length=128, unique=true)
+     * @Assert\NotBlank(allowNull=false, message="Email obligatoire")
+     * @Assert\Email(
+     * message = "Email non valide.")
      */
+
     private $email;
 
     /**
-     * @ORM\Column(name="is_active", type="boolean")
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank(allowNull=false, message="veuillez entrer votre mot de passe")
+     * @Assert\Regex(
+     *  pattern = "#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)#",
+     *  match=true,
+     *  message="8 caractères minimum")
+     * @Assert\Length(
+     *  min = 8,
+     *  minMessage="8 caractères minimum")
      */
-    private $isActive;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    
     private $pictures;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank(allowNull=false, message="Decrivez-vous pour nous permettre de mieux cibler vôtre recherche")
+     * @Assert\Length(
+     *      min = 150,
+     *      max = 3000,
+     *      minMessage = "{{ limit }} caractères minimum",
+     *      maxMessage = "{{ limit }} caractères maximum",
+     *      allowEmptyString = false
+     * )
+     * 
      */
+
     private $about;
 
     /**
      * @ORM\Column(type="datetime")
      */
+
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
+    
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
 
     public function __construct()
     {
@@ -242,5 +291,25 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * Get the value of isActive
+     */ 
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set the value of isActive
+     *
+     * @return  self
+     */ 
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
     }
 }

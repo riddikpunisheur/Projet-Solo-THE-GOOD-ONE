@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use App\Repository\QuestionsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class QuestionsController extends AbstractController
@@ -134,10 +135,10 @@ class QuestionsController extends AbstractController
 
             // moveFile() retourne le nom du fichier créé ou la valeur null
             // On attribue la valeur de $filename à la propriété image de $question
-            $question->setImage($filename);
+            $questions->setImage($filename);
             
             // On associe le user connecté à la question
-            $question->setUser($this->getUser());
+            $questions->setUser($this->getUser());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($questions);
@@ -159,7 +160,7 @@ class QuestionsController extends AbstractController
      * @Route("/admin/question/{id}/edit", name="admin_question_edit", requirements={"id": "\d+"})
      */
     
-     public function edit(ImageUploader $imageUploader, Questions $questions, Request $request)
+     public function edit(Questions $questions, Request $request)
     {
         // Avant toute chose, on teste si l'utilisateur a le droit de modifer la $question
         // Cette méthode retourne une 403 (Access Denied) si l'utilisateur
@@ -172,8 +173,8 @@ class QuestionsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // On transfert la nouvelle image si elle a été reçue
-            $filename = $imageUploader->moveFile($form->get('image')->getData(), 'questions');
-            $questions->setImage($filename);
+            //$filename = $imageUploader->moveFile($form->get('image')->getData(), 'questions');
+            //$questions->setImage($filename);
 
             $this->getDoctrine()->getManager()->flush();
 
