@@ -1,20 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello QuestionController!{% endblock %}
+{% block title %}Questions posées{% endblock %}
+{# ... #}
+{# this tag only applies to the forms defined in this template #}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{{ form(form) }}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/html/Atlantis/Projet/projet-the-good-one/projet-the-good-one/src/Controller/QuestionController.php'|file_link(0) }}">src/Controller/QuestionController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/html/Atlantis/Projet/projet-the-good-one/projet-the-good-one/templates/question/index.html.twig'|file_link(0) }}">templates/question/index.html.twig</a></code></li>
-    </ul>
-</div>
+<p class="tags">Filtrer par mot-clé : {% for tag in tags %}
+    {% include 'question/_tags.html.twig' %}
+    {% endfor %}</p>
+
+<h1>Questions posées</h1>
+
+{% for question in questions %}
+<hr class="my-4">
+{% include 'question/_detail.html.twig' %}
+{% endfor %}
+
 {% endblock %}
+
+

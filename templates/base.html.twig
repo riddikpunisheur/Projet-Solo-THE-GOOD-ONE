@@ -9,7 +9,14 @@
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         {% block stylesheets %}{% endblock %}
         <title>{% block title %}THE GOOD ONE{% endblock %}</title>
-       
+    {# templates/base.html.twig #}
+    
+    {# beware that the blocks in your template may be named different #}
+    {% block head_css %}
+    <!-- Copy CSS from https://getbootstrap.com/docs/4.4/getting-started/introduction/#css -->
+    {% endblock %}
+  
+
     </head>
     <body>
     <div class="body">
@@ -58,12 +65,31 @@
         </div>
        </div>
             <ul>
-        
+                <div id="right">
+                   
+                    <a href="{{ path('question_add') }}" class="btn btn-danger">Poser une question</a>
+                
+                </div>
+                </nav>
+                
+                <hr>
+                
+                {# display every flash message available #}
+                {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endfor %}
             </ul>
         </div>
         {% block body %}{% endblock %}
         {% block javascripts %}
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> 
+        {% endblock %}
+        {% block head_js %}
+        <!-- Copy JavaScript from https://getbootstrap.com/docs/4.4/getting-started/introduction/#js -->
         {% endblock %}
     </body>
 </html>

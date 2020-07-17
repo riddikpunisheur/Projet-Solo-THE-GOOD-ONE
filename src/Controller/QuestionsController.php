@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 
 class QuestionsController extends AbstractController
  {
@@ -53,62 +54,24 @@ class QuestionsController extends AbstractController
         ]);
     }
 
+    
     /**
-     * @Route("/question/{id}", name="question_show", requirements={"id": "\d+"})
+     * @Route("/{id}/edit", name="review_edit", methods={"GET","POST"})
      */
-    public function show(Questions $questions, Request $request, UserRepository $userRepository, AnswerRepository $answerRepository)
+    public function edit(Request $request, Questions $questions): Response
     {
-        // Is question blocked ?
-        if ($questions->getIsBlocked()) {
-            throw $this->createAccessDeniedException('Non autorisé.');
+        $form = $this->createForm(QuestionsType::class, $questions);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('questions_index');
         }
 
-        // On ne va pas traiter le formulaire alors qu'on ne souhaite pas l'afficher
-        // On ne le fait donc que si la question est active
-        if ($questions->isActive()) {
-            $answer = new Answer();
-            
-            $form = $this->createForm(AnswerType::class, $answer);
-            
-            $form->handleRequest($request);
-            
-            if ($form->isSubmitted() && $form->isValid()) {
-                
-                // $answer = $form->getData();
-                // On associe Réponse
-                $answer->setQuestion($questions);
-                
-                // On attribue un nouveau DateTime à la propriété updatedAt de $question
-                $questions->setUpdatedAt(new \DateTime());
-                
-                // On associe le user connecté à la réponse
-                $answer->setUser($this->getUser());
-                
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($answer);
-                $entityManager->flush();
-                
-                $this->addFlash('success', 'Réponse ajoutée');
-                
-                return $this->redirectToRoute('questions_show', ['id' => $questions->getId()]);
-            }
-            // On définir notre FormView pour l'envoyer au template
-            $formView = $form->createView();
-        } else {
-            // Si on n'a pas de formulaire, on définit au moins $formView
-            $formView = null;
-        }
-
-        // Réponses non bloquées
-        $answersNonBlocked = $answerRepository->findBy([
+        return $this->render('questions/edit.html.twig', [
             'questions' => $questions,
-            'isBlocked' => false,
-        ]);
-
-        return $this->render('questions/show.html.twig', [
-            'questions' => $questions,
-            'answersNonBlocked' => $answersNonBlocked,
-            'form' => $formView,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -126,16 +89,6 @@ class QuestionsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Cette ligne de code est un vestige de Symfony 3, elle est inutile depuis Symfony 4.0
-            // $question = $form->getData();
-
-            // On déplace l'image reçu, si elle existe, dans un sous-dossier de /public, «questions»
-            $filename = $imageUploader->moveFile($form->get('image')->getData(), 'questions');
-
-            // moveFile() retourne le nom du fichier créé ou la valeur null
-            // On attribue la valeur de $filename à la propriété image de $question
-            $questions->setImage($filename);
             
             // On associe le user connecté à la question
             $questions->setUser($this->getUser());
@@ -155,11 +108,11 @@ class QuestionsController extends AbstractController
     }
 
     
-
+    
     /**
      * @Route("/admin/question/{id}/edit", name="admin_question_edit", requirements={"id": "\d+"})
      */
-    
+    /*
      public function edit(Questions $questions, Request $request)
     {
         // Avant toute chose, on teste si l'utilisateur a le droit de modifer la $question
@@ -188,7 +141,7 @@ class QuestionsController extends AbstractController
 
     }
     
-
+*/
 
     /**
      * @Route("/admin/question/toggle/{id}", name="admin_question_toggle")
@@ -199,8 +152,7 @@ class QuestionsController extends AbstractController
             throw $this->createNotFoundException('Questions non trouvée.');
         }
 
-        // Inverse the boolean value via not (!)
-        $questions->setIsBlocked(!$questions->getIsBlocked());
+        
         // Save
         $em = $this->getDoctrine()->getManager();
         $em->flush();

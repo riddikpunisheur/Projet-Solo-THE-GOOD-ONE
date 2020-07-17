@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use App\Entity\Questions;
-use App\Entity\Activitys;
-use App\Repository\UserRepository;
 use App\Form\UserType;
+use App\Entity\Activitys;
+use App\Entity\Questions;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(name="app_users")
@@ -25,7 +26,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=64, nullable=true)
      * @Assert\NotBlank(allowNull=false, message="Prénom obligatoire")
      * @Assert\Length(
      *      min = 3,
@@ -39,7 +40,7 @@ class User implements UserInterface
     private $first_name;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=64 nullable=true)
      * @Assert\NotBlank(allowNull=false, message="Nom obligatoire")
      * @Assert\Length(
      *      min = 3,
@@ -101,8 +102,7 @@ class User implements UserInterface
      *      minMessage = "{{ limit }} caractères minimum",
      *      maxMessage = "{{ limit }} caractères maximum",
      *      allowEmptyString = false
-     * )
-     * 
+     * ) 
      */
 
     private $about;
@@ -123,12 +123,32 @@ class User implements UserInterface
      */
     private $isActive;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="user", orphanRemoval=true)
+     */
+    private $questions;
+
+
     public function __construct()
     {
+        //POUR PLUS TARD LES LANGUES
+        //$this->language = new ArrayCollection();
+        
+        $this->first_name = new ArrayCollection();
+        $this->last_name = new ArrayCollection();
+        $this->email = new ArrayCollection();
+        $this->birthdate = new \DateTime();
+        $this->about = new ArrayCollection();
+        //$this->username = '#'.random_int(1, 100000);
+        $this->createdAt = new \DateTime;
         $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid('', true));
     }
+
+    public function __toString()
+    {
+        return $this->about;
+    }
+
 
     public function getId(): ?int
     {
@@ -312,4 +332,26 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * Get the value of questions
+     */ 
+    public function getQuestions()
+    {
+        return $this->questions;
+    }
+
+    /**
+     * Set the value of questions
+     *
+     * @return  self
+     */ 
+    public function setQuestions($questions)
+    {
+        $this->questions = $questions;
+
+        return $this;
+    }
+
+
 }

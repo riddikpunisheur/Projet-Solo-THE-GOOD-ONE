@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ question.title }}{% endblock %}
+
+{% block body %}
+
+{% include 'question/_detail.html.twig' with {'detail': true} %}
+
+{% if is_granted('ROLE_MODERATOR') %}
+{% set btnLabel = question.isBlocked ? 'Débloquer cette question' : 'Bloquer cette question' %}
+<hr>
+<p><a href="{{ path('admin_question_toggle', {'id': question.id}) }}" class="btn btn-warning">{{ btnLabel }}</a></p>
+{% endif %}
+
+<hr>
+
+    <div class="small-grey-text">
+        par <b class="username">{{ answer.user.username }}</b> le {{ answer.createdAt|date("d/m/Y à h:i") }}
+    </div>
+</div>
+{% else %}
+<p class="text-secondary">Pas de réponse pour le moment, une idée, ou bien connaissez-vous quelqu'un qui pourrait
+    répondre ?</p>
+{% endfor %}
+
+<hr>
+{% if question.active %}
+<h4>Proposer une réponse</h4>
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<button type="submit" class="btn btn-primary">Soumettre</button>
+{{ form_end(form) }}
+{% else %}
+<div class="alert alert-warning">Cette question est désactivée, vous ne pouvez plus y répondre</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{# ... #}
+{# this tag only applies to the forms defined in this template #}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{% block body %}
+<h1>User Sign Up:</h1>
+{{ form(form) }}
+{% endblock %}
+
+{% set questionClass = question.isblocked ? 'blocked' : '' %}
+
+<div class="question-container {{ questionClass }}">
+    <h2>
+        {% if detail is defined %}
+        {{ question.title }}
+        {% else %}
+        <a href="{{ path('question_show', {'id': question.id}) }}">{{ question.title }}</a>
+        {% endif %}
+        <span class="badge badge-{{ question.isSolved ? 'success' : 'warning' }}">
+            {{ question.isSolved ? 'Résolue' : 'En attente' }}
+        </span>
+    </h2>
+
+    <p class="small-grey-text">
+        Posée par
+        <strong>{{ question.user.username }}</strong> le {{ question.createdAt|date("d/m/Y à h:i") }}
+        <br>
+        <i><b>{{ question.answers|length }}</b> réponse(s)</i>
+    </p>
+
+    {% if is_granted('edit', question) %}
+    <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-warning btn-sm">Modifier la question</a>
+    {% endif %}
+
+    {% if detail is defined %}
+    <p>
+        {{ question.body }}
+    </p>
+    {% endif %}
+
+    <div class="tags">
+        {% for tag in question.tags %}
+        {% include 'question/_tags.html.twig' %}
+        {% endfor %}
+    </div>
+</div>

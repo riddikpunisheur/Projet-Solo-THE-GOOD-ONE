@@ -45,6 +45,15 @@ class Questions
      */
     private $updated_at;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="questions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,4 +118,26 @@ class Questions
 
         return $this;
     }
+
+    /**
+     * Get the value of user
+     */ 
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set the value of user
+     *
+     * @return  self
+     */ 
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+
 }

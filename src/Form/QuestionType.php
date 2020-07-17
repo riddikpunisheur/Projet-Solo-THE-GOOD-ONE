@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Questions;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class QuestionType extends AbstractType
@@ -21,7 +22,10 @@ class QuestionType extends AbstractType
             'expanded' => true,
             'multiple' => true,
         ])
-        ;
+        ->add('published', CheckboxType::class, [
+            'label_attr' => ['class' => 'switch-custom'],
+        ]);
+        
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -33,4 +37,5 @@ class QuestionType extends AbstractType
             ],
         ]);
     }
+
 }

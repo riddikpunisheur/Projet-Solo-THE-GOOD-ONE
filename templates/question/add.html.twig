@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Remplir les questions{% endblock %}
+
+{% block body %}
+
+<h1>REmplir les questions</h1>
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<button type="submit" class="btn btn-primary">Soumettre</button>
+{{ form_end(form) }}
+
+{% endblock %}
