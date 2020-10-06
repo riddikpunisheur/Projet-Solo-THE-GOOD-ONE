@@ -7,15 +7,15 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="shortcut icon" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" type="image/x-icon">
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        {# beware that the blocks in your template may be named different #}
+        {% block head_css %}
+        <!-- Copy CSS from https://getbootstrap.com/docs/4.4/getting-started/introduction/#css -->
+        {% endblock %}
         {% block stylesheets %}{% endblock %}
         <title>{% block title %}THE GOOD ONE{% endblock %}</title>
     {# templates/base.html.twig #}
-    
-    {# beware that the blocks in your template may be named different #}
-    {% block head_css %}
-    <!-- Copy CSS from https://getbootstrap.com/docs/4.4/getting-started/introduction/#css -->
-    {% endblock %}
-  
+
+
 
     </head>
     <body>
